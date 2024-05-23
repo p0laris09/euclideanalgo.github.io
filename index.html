@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Euclidean Algorithm</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #b0e57c; /* Pastel green background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            text-align: center;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .members {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="homePage">
+        <h1>THE EUCLIDEAN ALGORITHM</h1>
+        <p>Let m and n be positive integers with n &lt; m. Let<br>
+        m = nq₁ + r₁<br>
+        n = r₁q₂ + r₂<br>
+        r₁ = r₂q₃ + r₃<br>
+        rₙ₋₁ = rₙqₙ<br>
+        be the result of iterating the Division Algorithm, where rₙ is the last non-zero remainder. Then<br>
+        gcd(m,n) = rₙ</p>
+        <p>The greatest common divisor and the least common multiple of two integers are related by the formula</p>
+        <p>lcm(m,n) = m.n / gcd(m,n)</p>
+        <div class="members">
+            <p>Members:</p>
+            <p>Canlas, Clyde D.<br>
+            Enrique, Jhon Mark A.<br>
+            Ramos, Anne Lorraine F.</p>
+        </div>
+        <button onclick="showInputPage()">Start</button>
+    </div>
+
+    <div class="container" id="inputPage" style="display:none;">
+        <h1>THE EUCLIDEAN ALGORITHM</h1>
+        <label for="num1">Enter the first number:</label><br>
+        <input type="number" id="num1" required><br><br>
+        <label for="num2">Enter the second number:</label><br>
+        <input type="number" id="num2" required><br><br>
+        <button onclick="computeGcdLcm()">Submit</button>
+    </div>
+
+    <div class="container" id="resultPage" style="display:none;">
+        <h1>THE EUCLIDEAN ALGORITHM</h1>
+        <p id="solution"></p>
+        <p id="result"></p>
+        <button onclick="retry()">Yes</button>
+        <button onclick="backToHome()">No</button>
+    </div>
+
+    <script>
+        function showInputPage() {
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('inputPage').style.display = 'block';
+        }
+
+        function computeGcdLcm() {
+            let num1 = parseInt(document.getElementById('num1').value);
+            let num2 = parseInt(document.getElementById('num2').value);
+
+            if (num1 < num2) {
+                [num1, num2] = [num2, num1];
+            }
+
+            let a = num1, b = num2;
+            let r, steps = '';
+
+            while (b != 0) {
+                r = a % b;
+                steps += `${a} = ${b} * ${Math.floor(a / b)} + ${r}<br>`;
+                a = b;
+                b = r;
+            }
+
+            let gcd = a;
+            let lcm = (num1 * num2) / gcd;
+
+            document.getElementById('solution').innerHTML = steps;
+            document.getElementById('result').innerHTML = `The gcd(${num1}, ${num2}) is ${gcd}<br>The lcm(${num1}, ${num2}) is ${lcm}`;
+            
+            document.getElementById('inputPage').style.display = 'none';
+            document.getElementById('resultPage').style.display = 'block';
+        }
+
+        function retry() {
+            document.getElementById('resultPage').style.display = 'none';
+            document.getElementById('inputPage').style.display = 'block';
+        }
+
+        function backToHome() {
+            document.getElementById('resultPage').style.display = 'none';
+            document.getElementById('homePage').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
