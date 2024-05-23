@@ -6,59 +6,84 @@
     <title>The Euclidean Algorithm</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #b0e57c; /* Pastel green background */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2E8B57;
             margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            flex-direction: column;
-            text-align: center;
+            color: #fff;
         }
         .container {
             background: #fff;
-            padding: 20px;
+            color: #333;
+            padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             max-width: 600px;
+            width: 100%;
+            text-align: center;
         }
         h1 {
-            color: #4CAF50;
+            color: #2E8B57;
+            margin-bottom: 20px;
+        }
+        p {
+            line-height: 1.6;
         }
         button {
-            background-color: #4CAF50;
+            background-color: #2E8B57;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 24px;
             margin-top: 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #276646;
+        }
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        label {
+            display: block;
+            text-align: left;
+            margin: 10px 0 5px;
+            font-weight: bold;
         }
         .members {
             margin-top: 20px;
             font-size: 14px;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="container" id="homePage">
         <h1>THE EUCLIDEAN ALGORITHM</h1>
-        <p>Let m and n be positive integers with n &lt; m. Let<br>
+        <p>Let m and n be positive integers with n &lt; m. Let<br><br>
         m = nq₁ + r₁<br>
         n = r₁q₂ + r₂<br>
-        r₁ = r₂q₃ + r₃<br>
+        r₁ = r₂q₃ + r₃<br><br>
         rₙ₋₁ = rₙqₙ<br>
-        be the result of iterating the Division Algorithm, where rₙ is the last non-zero remainder. Then<br>
-        gcd(m,n) = rₙ</p>
+        be the result of iterating the Division Algorithm, where rₙ is the last non-zero remainder. Then<br><br>
+        <b>gcd(m,n) = rₙ</p>
         <p>The greatest common divisor and the least common multiple of two integers are related by the formula</p>
-        <p>lcm(m,n) = m.n / gcd(m,n)</p>
+        <p>lcm(m,n) = m.n / gcd(m,n)</b></p>
         <div class="members">
-            <p>Members:</p>
+            <p><b>Members:</b></p>
             <p>Canlas, Clyde D.<br>
             Enrique, Jhon Mark A.<br>
             Ramos, Anne Lorraine F.</p>
@@ -68,10 +93,11 @@
 
     <div class="container" id="inputPage" style="display:none;">
         <h1>THE EUCLIDEAN ALGORITHM</h1>
-        <label for="num1">Enter the first number:</label><br>
-        <input type="number" id="num1" required><br><br>
-        <label for="num2">Enter the second number:</label><br>
-        <input type="number" id="num2" required><br><br>
+        <div id="error" class="error" style="display: none;"></div>
+        <label for="num1">Enter the first number:</label>
+        <input type="number" id="num1" step="1" min="1" required>
+        <label for="num2">Enter the second number:</label>
+        <input type="number" id="num2" step="1" min="1" required>
         <button onclick="computeGcdLcm()">Submit</button>
     </div>
 
@@ -90,17 +116,44 @@
         }
 
         function computeGcdLcm() {
-            let num1 = parseInt(document.getElementById('num1').value);
-            let num2 = parseInt(document.getElementById('num2').value);
+            const num1 = document.getElementById('num1').value;
+            const num2 = document.getElementById('num2').value;
+            const errorDiv = document.getElementById('error');
 
-            if (num1 < num2) {
-                [num1, num2] = [num2, num1];
+            if (!num1 && !num2) {
+                errorDiv.textContent = "Both input fields are required.";
+                errorDiv.style.display = 'block';
+                return;
+            }
+            else if(!num1){
+                errorDiv.textContent = "First Number field is required.";
+                errorDiv.style.display = 'block';
+                return;
+            }
+            else if(!num2){
+                errorDiv.textContent = "Second Number field is required.";
+                errorDiv.style.display = 'block';
+                return;
             }
 
-            let a = num1, b = num2;
+            if (!Number.isInteger(parseFloat(num1)) || !Number.isInteger(parseFloat(num2))) {
+                errorDiv.textContent = "Please enter valid integers.";
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            errorDiv.style.display = 'none';
+
+            let a = parseInt(num1);
+            let b = parseInt(num2);
+
+            if (a < b) {
+                [a, b] = [b, a];
+            }
+
             let r, steps = '';
 
-            while (b != 0) {
+            while (b !== 0) {
                 r = a % b;
                 steps += `${a} = ${b} * ${Math.floor(a / b)} + ${r}<br>`;
                 a = b;
@@ -108,7 +161,7 @@
             }
 
             let gcd = a;
-            let lcm = (num1 * num2) / gcd;
+            let lcm = (parseInt(num1) * parseInt(num2)) / gcd;
 
             document.getElementById('solution').innerHTML = steps;
             document.getElementById('result').innerHTML = `The gcd(${num1}, ${num2}) is ${gcd}<br>The lcm(${num1}, ${num2}) is ${lcm}`;
@@ -118,11 +171,17 @@
         }
 
         function retry() {
+            document.getElementById('num1').value = '';
+            document.getElementById('num2').value = '';
+            document.getElementById('error').style.display = 'none';
             document.getElementById('resultPage').style.display = 'none';
             document.getElementById('inputPage').style.display = 'block';
         }
 
         function backToHome() {
+            document.getElementById('num1').value = '';
+            document.getElementById('num2').value = '';
+            document.getElementById('error').style.display = 'none';
             document.getElementById('resultPage').style.display = 'none';
             document.getElementById('homePage').style.display = 'block';
         }
