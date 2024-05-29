@@ -136,6 +136,21 @@
                 errorDiv.style.display = 'block';
                 return;
             }
+            if (num1 == 0 && num2 == 0) {
+                errorDiv.textContent = "Both input fields are not supposed to be 0.";
+                errorDiv.style.display = 'block';
+                return;
+            }
+            else if(num1 == 0){
+                errorDiv.textContent = "First Number field should not be 0.";
+                errorDiv.style.display = 'block';
+                return;
+            }
+            else if(num2 == 0){
+                errorDiv.textContent = "Second Number field should not be 0.";
+                errorDiv.style.display = 'block';
+                return;
+            }
 
             if (!Number.isInteger(parseFloat(num1)) || !Number.isInteger(parseFloat(num2))) {
                 errorDiv.textContent = "Please enter valid integers.";
